@@ -55,7 +55,7 @@ class ProductManager {
                     stock: stock || product.stock
 
                 }
-                console.log("El producto se ha actualizado:" + productoActualizado)
+                console.log("El producto se ha actualizado:" + JSON.stringify(productoActualizado))
                
             }
             return product;

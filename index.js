@@ -1,12 +1,9 @@
-const ProductManager = require("./productManagerClass")
+const ProductManager = require("./productManagerClass");
 
-
-// abajo creo una instancia de la clase
 const manager = new ProductManager();
 
-console.log(manager);
 
-manager.addProduct({ // aca estoy llamando al metodo de la instancia
+manager.addProduct({
     title: "Laptop",
     description: "High performance laptop.",
     price: 1000,
@@ -15,7 +12,7 @@ manager.addProduct({ // aca estoy llamando al metodo de la instancia
     stock: 10
 });
 
-manager.addProduct({ // aca estoy llamando al metodo de la instancia
+manager.addProduct({
     title: "mesa",
     description: "High performance mesa.",
     price: 1000,
@@ -24,7 +21,7 @@ manager.addProduct({ // aca estoy llamando al metodo de la instancia
     stock: 10
 });
 
-manager.addProduct({ // aca estoy llamando al metodo de la instancia
+manager.addProduct({
     title: "silla",
     description: "High performance silla.",
     price: 1000,
@@ -32,7 +29,8 @@ manager.addProduct({ // aca estoy llamando al metodo de la instancia
     code: "LP30",
     stock: 10
 });
-manager.addProduct({ // aca estoy llamando al metodo de la instancia
+
+manager.addProduct({
     title: "bowl",
     description: "High performance bowl.",
     price: 1000,
@@ -40,7 +38,8 @@ manager.addProduct({ // aca estoy llamando al metodo de la instancia
     code: "LP55",
     stock: 10
 });
-manager.addProduct({ // aca estoy llamando al metodo de la instancia
+
+manager.addProduct({
     title: "pava electrica",
     description: "duradera pava electrica.",
     price: 1000,
@@ -48,24 +47,24 @@ manager.addProduct({ // aca estoy llamando al metodo de la instancia
     code: "LP40",
     stock: 10
 });
-const listaDeProductos = manager.getProducts();
-console.log(listaDeProductos);
 
-const producto1 = manager.getProductById(4);
-console.log(" producto a actualizar: " + producto1);
+// Obtener la lista de productos 
+console.log("Esta es la lista completa de productos:");
+const listaDeProductos = manager.getProducts();
+listaDeProductos.forEach(producto => {
+    console.log(producto);
+});
+
+//  mostramos el producto a actualizar
+console.log("Producto a actualizar:", manager.getProductById(4));
 
 manager.updateProduct(4, {
     title: "pava electrica",
     description: "duradera pava electrica.",
-    price: 1000});
+    price: 1000
+});
 
-
-const productoActualizado = manager.getProductById(4)
-console.log("producto actualizado: " +JSON.stringify(productoActualizado))
-
-console.log("Esta es la lista completa de productos" + manager.getProducts())
-
-manager.deleteProduct(4)
-console.log("Esta es la lista completa de productos con el producto eliminado" + manager.getProducts())
-
-
+// Aca elimino el producto y pido mostrar la lista actualizada
+manager.deleteProduct(4);
+console.log("Esta es la lista completa de productos con el producto eliminado:");
+console.log(manager.getProducts());
