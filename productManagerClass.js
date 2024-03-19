@@ -7,11 +7,11 @@ class ProductManager {
 
     addProduct({ title, description, price, thumbnail, code, stock }) {
         if (!title || !description || !price || !thumbnail || !code || !stock) {
-            console.error("All fields are required.");
+            console.error("Todos los campos son obligatorios.");
             return;
         }
         if (this.products.some(product => product.code === code)) {
-            console.error("Product code must be unique.");
+            console.error("El codigo debe ser unico");
             return;
         }
         const newProduct = {
@@ -24,7 +24,7 @@ class ProductManager {
             stock
         };
         this.products.push(newProduct);
-        console.log(`Product added successfully with id ${newProduct.id}`);
+        console.log(`Producto añadido exitosamente con el ID: ${newProduct.id}`);
         // "`" esta comilla es option y }
     }
 
@@ -40,12 +40,15 @@ class ProductManager {
         }
         return product;
     }
-
-    updateProduct(id , newProduct) {
+// aca en el updateProduct modifique agregando una variable null a productoActualizado 
+// para que este metodo me retorne el valor actualizado
+    updateProduct(id, newProduct) {
+        let productoActualizado = null;
         this.products = this.products.map(product => {
             if (product.id === id) {
                 const { title, description, price, thumbnail, code, stock } = newProduct;
-                const productoActualizado = {
+                productoActualizado = {
+                    
                     id,
                     title: title || product.title,
                     description: description || product.description,
@@ -53,24 +56,25 @@ class ProductManager {
                     thumbnail: thumbnail || product.thumbnail,
                     code: code || product.code,
                     stock: stock || product.stock
-
-                }
-                console.log("El producto se ha actualizado:" + JSON.stringify(productoActualizado))
-               
+                };
+                console.log("El producto se ha actualizado:", productoActualizado);
+                return productoActualizado;
             }
             return product;
-        })
+        });
+        return productoActualizado;
     }
+
 
     deleteProduct(id) {
         this.products = this.products.filter(product => {
-            if (product.id === id){
-                return false ;
+            if (product.id === id) {
+                return false;
             } else {
                 return true;
             }
         })
-        
+
     }
 }
 

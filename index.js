@@ -44,7 +44,7 @@ manager.addProduct({
     description: "duradera pava electrica.",
     price: 1000,
     thumbnail: "imagendepavaelectrica.png",
-    code: "LP40",
+    code: "LP800",
     stock: 10
 });
 
@@ -58,13 +58,15 @@ listaDeProductos.forEach(producto => {
 //  mostramos el producto a actualizar
 console.log("Producto a actualizar:", manager.getProductById(4));
 
+
 manager.updateProduct(4, {
-    title: "pava electrica",
-    description: "duradera pava electrica.",
-    price: 1000
+    title: "horno",
+    description: "horno electrico.",
+    price: 900
 });
 
+
 // Aca elimino el producto y pido mostrar la lista actualizada
-manager.deleteProduct(4);
-console.log("Esta es la lista completa de productos con el producto eliminado:");
+manager.deleteProduct(2);
+console.log("Esta es la lista completa de productos con el producto 2 eliminado y el 4 modificado:");
 console.log(manager.getProducts());
