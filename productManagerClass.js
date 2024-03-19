@@ -1,8 +1,8 @@
 class ProductManager {
-    
+
     constructor() {
         this.products = [];
-        this.nextId = 1 ;
+        this.nextId = 1;
     }
 
     addProduct({ title, description, price, thumbnail, code, stock }) {
@@ -40,6 +40,39 @@ class ProductManager {
         }
         return product;
     }
+
+    updateProduct(id , newProduct) {
+        this.products = this.products.map(product => {
+            if (product.id === id) {
+                const { title, description, price, thumbnail, code, stock } = newProduct;
+                const productoActualizado = {
+                    id,
+                    title: title || product.title,
+                    description: description || product.description,
+                    price: price || product.price,
+                    thumbnail: thumbnail || product.thumbnail,
+                    code: code || product.code,
+                    stock: stock || product.stock
+
+                }
+                console.log("El producto se ha actualizado:" + productoActualizado)
+               
+            }
+            return product;
+        })
+    }
+
+    deleteProduct(id) {
+        this.products = this.products.filter(product => {
+            if (product.id === id){
+                return false ;
+            } else {
+                return true;
+            }
+        })
+        
+    }
 }
+
 
 module.exports = ProductManager;
