@@ -1,5 +1,5 @@
 const ProductManager = require("./productManagerClass");
-
+// const fs = require(`fs`);
 const manager = new ProductManager();
 
 
@@ -54,6 +54,11 @@ const listaDeProductos = manager.getProducts();
 listaDeProductos.forEach(producto => {
     console.log(producto);
 });
+
+// fs.writeFile('productos.json', JSON.stringify(listaActualizada, null, 2), (err) => {
+//     if (err) throw err;
+//     console.log('La lista de productos se ha guardado correctamente en el archivo productos.json');
+// });
 
 //  mostramos el producto a actualizar
 console.log("Producto a actualizar:", manager.getProductById(4));

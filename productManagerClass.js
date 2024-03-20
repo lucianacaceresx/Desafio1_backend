@@ -1,21 +1,52 @@
-class ProductManager {
+const fs = require('fs');
+const path = require('path');
 
-    constructor() {
-        this.products = [];
-        this.nextId = 1;
+class ProductManager {
+    constructor(filename = 'products.json') {
+        this.filePath = path.join(__dirname, filename);
+        this.initFile();
     }
 
+    initFile() {
+        if (!fs.existsSync(this.filePath)) {
+            fs.writeFileSync(this.filePath, JSON.stringify([]));
+        }
+    }
+
+    readProducts() {
+        const data = fs.readFileSync(this.filePath);
+        return JSON.parse(data);
+    }
+
+    writeProducts(data) {
+        fs.writeFileSync(this.filePath, JSON.stringify(data, null, 2));
+    }
+
+    // addProduct(product) {
+    //     const products = this.readProducts();
+    //     products.push(product);
+    //     this.writeProducts(products);
+    // }
+
     addProduct({ title, description, price, thumbnail, code, stock }) {
+        const products = this.readProducts();
+
         if (!title || !description || !price || !thumbnail || !code || !stock) {
             console.error("Todos los campos son obligatorios.");
             return;
         }
-        if (this.products.some(product => product.code === code)) {
+        if (products.some(product => product.code === code)) {
             console.error("El codigo debe ser unico");
             return;
         }
+        let id;
+        if (products.length === 0) {
+            id = 1; // Si no hay productos, el ID inicial será 1
+        } else {
+            id = products.reduce((max, obj) => obj.id > max ? obj.id : max, -Infinity) + 1;
+        }
         const newProduct = {
-            id: this.nextId++,
+            id,
             title,
             description,
             price,
@@ -23,32 +54,36 @@ class ProductManager {
             code,
             stock
         };
-        this.products.push(newProduct);
+        products.push(newProduct);
         console.log(`Producto añadido exitosamente con el ID: ${newProduct.id}`);
         // "`" esta comilla es option y }
+        this.writeProducts(products);
     }
 
-    getProducts() {
-        return this.products;
-    }
+    // getProductById(id) {
+    //     const products = this.readProducts();
+    //     return products.find(product => product.id === id);
+    // }
 
     getProductById(id) {
-        const product = this.products.find(product => product.id === id);
+        const products = this.readProducts();
+
+        const product = products.find(product => product.id === id);
         if (!product) {
             console.error("Not found");
             return;
         }
         return product;
     }
-// aca en el updateProduct modifique agregando una variable null a productoActualizado 
-// para que este metodo me retorne el valor actualizado
+
     updateProduct(id, newProduct) {
+        let products = this.readProducts();
         let productoActualizado = null;
-        this.products = this.products.map(product => {
+        products = products.map(product => {
             if (product.id === id) {
                 const { title, description, price, thumbnail, code, stock } = newProduct;
                 productoActualizado = {
-                    
+
                     id,
                     title: title || product.title,
                     description: description || product.description,
@@ -62,21 +97,25 @@ class ProductManager {
             }
             return product;
         });
+        this.writeProducts(products);
         return productoActualizado;
     }
 
-
     deleteProduct(id) {
-        this.products = this.products.filter(product => {
+        let products = this.readProducts();
+        products = products.filter(product => {
             if (product.id === id) {
                 return false;
             } else {
                 return true;
             }
         })
+        this.writeProducts(products);
+    }
 
+    getProducts() {
+        return this.readProducts();
     }
 }
-
 
 module.exports = ProductManager;
