@@ -5,12 +5,14 @@ class ProductManager {
     constructor(filename = 'products.json') {
         this.filePath = path.join(__dirname, filename);
         this.initFile();
+        
     }
 
     initFile() {
         if (!fs.existsSync(this.filePath)) {
             fs.writeFileSync(this.filePath, JSON.stringify([]));
         }
+        console.log("esto es el dirname" + __dirname)
     }
 
     readProducts() {
@@ -28,8 +30,8 @@ class ProductManager {
     //     this.writeProducts(products);
     // }
 
-    addProduct({ title, description, price, thumbnail, code, stock }) {
-        const products = this.readProducts();
+    async addProduct({ title, description, price, thumbnail, code, stock }) {
+        const products = await this.readProducts();
 
         if (!title || !description || !price || !thumbnail || !code || !stock) {
             console.error("Todos los campos son obligatorios.");
