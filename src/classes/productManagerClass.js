@@ -1,20 +1,49 @@
-//LEVANTAR EL SERVIDOR CON nodemon src/index.js
+import * as fs from 'fs';
+import path from "path";
+import { URL } from 'node:url'; // in Browser, the URL in native accessible on window
 
-class ProductManager {
-    constructor() {
-        this.products = [];
+const __dirname = new URL('.', import.meta.url).pathname;
+
+export default class ProductManager {
+    constructor(filename = 'products.json') {
+        this.filePath = path.join(__dirname, filename);
+        this.initFile();
+        
     }
-
-    addProduct({ title, description, price, thumbnail, code, stock }) {
+    initFile() {
+        if (!fs.existsSync(this.filePath)) {
+            fs.writeFileSync(this.filePath, JSON.stringify([]));
+        }
+        console.log("esto es el dirname" + __dirname)
+    }
+    readProducts() {
+        const data = fs.readFileSync(this.filePath);
+        return JSON.parse(data);
+    }
+    writeProducts(data) {
+        fs.writeFileSync(this.filePath, JSON.stringify(data, null, 2));
+    }
+    // addProduct(product) {
+    //     const products = this.readProducts();
+    //     products.push(product);
+    //     this.writeProducts(products);
+    // }
+    async addProduct({ title, description, price, thumbnail, code, stock }) {
+        const products = await this.readProducts();
         if (!title || !description || !price || !thumbnail || !code || !stock) {
-            throw new Error("Todos los campos son obligatorios.");
+            console.error("Todos los campos son obligatorios.");
+            return;
         }
-        if (this.products.some(product => product.code === code)) {
-            throw new Error("El código debe ser único");
+        if (products.some(product => product.code === code)) {
+            console.error("El codigo debe ser unico");
+            return;
         }
-
-        const id = this.products.length > 0 ? Math.max(...this.products.map(p => p.id)) + 1 : 1;
-
+        let id;
+        if (products.length === 0) {
+            id = 1; // Si no hay productos, el ID inicial será 1
+        } else {
+            id = products.reduce((max, obj) => obj.id > max ? obj.id : max, -Infinity) + 1;
+        }
         const newProduct = {
             id,
             title,
@@ -24,51 +53,59 @@ class ProductManager {
             code,
             stock
         };
-        this.products.push(newProduct);
+        products.push(newProduct);
         console.log(`Producto añadido exitosamente con el ID: ${newProduct.id}`);
-        return newProduct;
+        // "`" esta comilla es option y }
+        this.writeProducts(products);
     }
-
+    // getProductById(id) {
+    //     const products = this.readProducts();
+    //     return products.find(product => product.id === id);
+    // }
     getProductById(id) {
-        const product = this.products.find(product => product.id === id);
+        const products = this.readProducts();
+        const product = products.find(product => product.id === id);
         if (!product) {
-            throw new Error("Producto no encontrado");
+            console.error("Not found");
+            return;
         }
         return product;
     }
-
     updateProduct(id, newProduct) {
-        const index = this.products.findIndex(product => product.id === id);
-        if (index === -1) {
-            throw new Error("Producto no encontrado");
-        }
-
-        const updatedProduct = {
-            id,
-            title: newProduct.title || this.products[index].title,
-            description: newProduct.description || this.products[index].description,
-            price: newProduct.price || this.products[index].price,
-            thumbnail: newProduct.thumbnail || this.products[index].thumbnail,
-            code: newProduct.code || this.products[index].code,
-            stock: newProduct.stock || this.products[index].stock
-        };
-        this.products[index] = updatedProduct;
-        console.log("El producto se ha actualizado:", updatedProduct);
-        return updatedProduct;
+        let products = this.readProducts();
+        let productoActualizado = null;
+        products = products.map(product => {
+            if (product.id === id) {
+                const { title, description, price, thumbnail, code, stock } = newProduct;
+                productoActualizado = {
+                    id,
+                    title: title || product.title,
+                    description: description || product.description,
+                    price: price || product.price,
+                    thumbnail: thumbnail || product.thumbnail,
+                    code: code || product.code,
+                    stock: stock || product.stock
+                };
+                console.log("El producto se ha actualizado:", productoActualizado);
+                return productoActualizado;
+            }
+            return product;
+        });
+        this.writeProducts(products);
+        return productoActualizado;
     }
-
     deleteProduct(id) {
-        const index = this.products.findIndex(product => product.id === id);
-        if (index === -1) {
-            throw new Error("No se encontro el producto");
-        }
-        this.products.splice(index, 1);
-        console.log(`Producto con ID ${id} eliminado correctamente`);
+        let products = this.readProducts();
+        products = products.filter(product => {
+            if (product.id === id) {
+                return false;
+            } else {
+                return true;
+            }
+        })
+        this.writeProducts(products);
     }
-
     getProducts() {
-        return this.products;
+        return this.readProducts();
     }
 }
-
-export default ProductManager;

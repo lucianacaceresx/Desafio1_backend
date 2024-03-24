@@ -1,11 +1,11 @@
 [
   {
     "id": 1,
-    "title": "Laptop",
-    "description": "High performance laptop.",
+    "title": "pava electrica",
+    "description": "duradera pava electrica.",
     "price": 1000,
-    "thumbnail": "imagen/laptop.jpg",
-    "code": "LP100",
+    "thumbnail": "imagendepavaelectrica.png",
+    "code": "LP800",
     "stock": 10
   },
   {
@@ -22,26 +22,26 @@
     "title": "horno",
     "description": "horno electrico.",
     "price": 900,
-    "thumbnail": "imagendebowl.png",
-    "code": "LP55",
+    "thumbnail": "imagendemesa.png",
+    "code": "LP40",
     "stock": 10
   },
   {
     "id": 5,
-    "title": "pava electrica",
-    "description": "duradera pava electrica.",
+    "title": "Laptop",
+    "description": "High performance laptop.",
     "price": 1000,
-    "thumbnail": "imagendepavaelectrica.png",
-    "code": "LP800",
+    "thumbnail": "imagen/laptop.jpg",
+    "code": "LP100",
     "stock": 10
   },
   {
     "id": 6,
-    "title": "mesa",
-    "description": "High performance mesa.",
+    "title": "bowl",
+    "description": "High performance bowl.",
     "price": 1000,
-    "thumbnail": "imagendemesa.png",
-    "code": "LP40",
+    "thumbnail": "imagendebowl.png",
+    "code": "LP55",
     "stock": 10
   }
 ]
