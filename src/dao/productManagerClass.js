@@ -8,7 +8,7 @@ export default class ProductManager {
     constructor(filename = 'products.json') {
         this.filePath = path.join(__dirname, filename);
         this.initFile();
-        
+        console.log ("este es el dirname:" + __dirname)
     }
     initFile() {
         if (!fs.existsSync(this.filePath)) {
@@ -23,11 +23,7 @@ export default class ProductManager {
     writeProducts(data) {
         fs.writeFileSync(this.filePath, JSON.stringify(data, null, 2));
     }
-    // addProduct(product) {
-    //     const products = this.readProducts();
-    //     products.push(product);
-    //     this.writeProducts(products);
-    // }
+
     async addProduct({ title, description, price, thumbnail, code, stock }) {
         const products = await this.readProducts();
         if (!title || !description || !price || !thumbnail || !code || !stock) {
@@ -44,6 +40,7 @@ export default class ProductManager {
         } else {
             id = products.reduce((max, obj) => obj.id > max ? obj.id : max, -Infinity) + 1;
         }
+        
         const newProduct = {
             id,
             title,
@@ -58,12 +55,11 @@ export default class ProductManager {
         // "`" esta comilla es option y }
         this.writeProducts(products);
     }
-    // getProductById(id) {
-    //     const products = this.readProducts();
-    //     return products.find(product => product.id === id);
-    // }
-    getProductById(id) {
-        const products = this.readProducts();
+
+// crear los productos en el json, que mi productManagerClass.js me haga las funciones desde ese arreglo NO POR SEPARADO y ahi llamar la clase desde el app.js
+
+    async getProductById(id) {
+        const products = await this.readProducts();
         const product = products.find(product => product.id === id);
         if (!product) {
             console.error("Not found");
@@ -71,8 +67,8 @@ export default class ProductManager {
         }
         return product;
     }
-    updateProduct(id, newProduct) {
-        let products = this.readProducts();
+    async updateProduct(id, newProduct) {
+        let products = await this.readProducts();
         let productoActualizado = null;
         products = products.map(product => {
             if (product.id === id) {
@@ -94,8 +90,8 @@ export default class ProductManager {
         this.writeProducts(products);
         return productoActualizado;
     }
-    deleteProduct(id) {
-        let products = this.readProducts();
+    async deleteProduct(id) {
+        let products = await this.readProducts();
         products = products.filter(product => {
             if (product.id === id) {
                 return false;

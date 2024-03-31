@@ -1,6 +1,6 @@
 //LEVANTAR EL SERVIDOR CON nodemon src/index.js
 
-import ProductManager from './classes/productManagerClass.js';
+import ProductManager from './dao/productManagerClass.js';
 
 const manager = new ProductManager();
 
