@@ -1,8 +1,11 @@
-import { Router} from `express`;
-import UserManager from "../dao/productManagerClass.js"
-export const router = Router()
+import express from "express";
+import ProductManager from "../dao/productManagerClass.js"
 
-
+const app2 = express();
+const PORT = 3000;
+const server = app2.listen(PORT, () => {
+console.log(` >>>>> 🚀 Server started at http://localhost:${PORT}`)
+})
 
 // router.get(`/`, (req, resp)=>{
 
@@ -13,6 +16,8 @@ export const router = Router()
 app2.use(express.json());
 app2.use(express.urlencoded({extended:true}))
 //Ejemplo POSTMAN:
+
+const routerCart = express.Router();
 
 app2.get("/api/products", async(req, resp)=> {})
 
@@ -128,9 +133,6 @@ routerCart.delete('/:id/productos/:id_prod', async(req, res) => {
     }
 })
 
-const PORT = 8020;
-const server = app.listen(PORT, () => {
-console.log(` >>>>> 🚀 Server started at http://localhost:${PORT}`)
-})
+
 
 server.on('error', (err) => console.log(err));
